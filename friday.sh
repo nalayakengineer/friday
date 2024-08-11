@@ -13,22 +13,22 @@ BLUE='\033[0;34m'
 NC='\033[0m'
 BASE_DIR=""
 PACKAGE_MANAGER="pnpm"
-
+PANDA_CONFIG_FILE="panda.config.ts"
 
 # Functions to print error, info and warning messages
 EchoError() {
     local TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
-    echo -e "${RED}${TIMESTAMP} error: ${NC} $1"
+    echo -e "💔${RED}${TIMESTAMP} error: ${NC} $1"
 }
 
 EchoInfo() {
     local TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
-    echo -e "${BLUE}${TIMESTAMP} info: ${NC} $1"
+    echo -e "❕${BLUE}${TIMESTAMP} info: ${NC} $1"
 }
 
 EchoWarning() {
     local TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
-    echo -e "${YELLOW}${TIMESTAMP} warn: ${NC} $1"
+    echo -e "✋🏻${YELLOW}${TIMESTAMP} warn: ${NC} $1"
 }
 
 
@@ -83,17 +83,37 @@ cd "$BASE_DIR" || { EchoError "Failed to change directory to $BASE_DIR"; exit 1;
 $PACKAGE_MANAGER create vite@latest . --template react-ts  -- --no-git || { EchoError "Failed to create React project"; exit 1; }
 
 # Install dependencies
-EchoInfo "Installing dependencies: panda-css, axios, react-router-dom..."
-$PACKAGE_MANAGER install @pandacss/dev axios react-router-dom
+EchoInfo "Installing dependencies: panda-css (dev), axios, react-router-dom...."
+$PACKAGE_MANAGER install axios react-router-dom -D @pandacss/dev 
 
-EchoInfo "Initialise Panda CSS..."
 #Initialise Panda CSS
+EchoInfo "Initialise Panda CSS..."
 $PACKAGE_MANAGER panda init --postcss
 
-EchoInfo "Configuring the entry CSS with layers..."
+#Updating package.json scripts
+EchoInfo "Updating package.json scripts..."
+jq '.scripts.prepare = "codegen"' package.json > tmp.json && mv tmp.json package.json
+
+
 # Update index.css
-echo "@layer reset, base, tokens, recipes, utilities;" > src/index.css
+EchoInfo "Configuring the entry CSS with layers..."
+if [ -f src/index.css ]; then
+    echo "@layer reset, base, tokens, recipes, utilities;" | cat - src/index.css > tmpfile && mv tmpfile src/index.css
+else
+    EchoWarning "src/index.css not found. Skipping index.css update."
+fi
+
+EchoInfo "Updating panda.config.ts file..."
+#Update panda.config.ts file
+if [ -f "$PANDA_CONFIG_FILE" ]; then
+    #Add the jsxFramework property to the configuration file
+    sed -i '' '/^}/i\   
+    jsxFramework: "react",\
+    ' "$PANDA_CONFIG_FILE" || { EchoWarning "Failed to update $PANDA_CONFIG_FILE";}
+else
+    EchoWarning "$PANDA_CONFIG_FILE not found. Skipping configuration update."
+fi
 
 EchoInfo "Project Setup Complete. 🚀"
 
-EchoInfo "Run the following commands to start:\n cd $BASE_DIR\n $PACKAGE_MANAGER run dev"
+EchoInfo "Run the following commands to start:\ncd $BASE_DIR\n$PACKAGE_MANAGER run dev"
