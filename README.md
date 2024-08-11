@@ -60,7 +60,5 @@ Each operation performed by the script is logged with a timestamp, making it eas
 If you have suggestions or improvements, feel free to open an issue or submit a pull request.
 
 ## Contact Me:
-Get in touch today
-Let’s talk; if you want to collaborate or an idea you may have
-
-# ✉️ contact@bharatbhushan.me 
+Get in touch today. Let’s talk; if you want to collaborate or an idea you may have 
+contact@bharatbhushan.me ✉️ 
