@@ -1,5 +1,11 @@
 #!/bin/zsh
 
+# Author: Bharat Bhushan
+# Date: 2024-08-11
+# Version: 1.0
+# Description: A script to create a new React project using Vite with TypeScript + SWC
+
+
 #Setup the default values
 RED='\033[0;31m'
 YELLOW='\033[0;33m'
@@ -12,17 +18,17 @@ PACKAGE_MANAGER="pnpm"
 # Functions to print error, info and warning messages
 EchoError() {
     local TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
-    echo -e "${RED}${TIMESTAMP} ERROR: ${NC} $1"
+    echo -e "${RED}${TIMESTAMP} error: ${NC} $1"
 }
 
 EchoInfo() {
     local TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
-    echo -e "${BLUE}${TIMESTAMP} INFO: ${NC} $1"
+    echo -e "${BLUE}${TIMESTAMP} info: ${NC} $1"
 }
 
 EchoWarning() {
     local TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
-    echo -e "${YELLOW}${TIMESTAMP} WARN: ${NC} $1"
+    echo -e "${YELLOW}${TIMESTAMP} warn: ${NC} $1"
 }
 
 
@@ -80,11 +86,14 @@ $PACKAGE_MANAGER create vite@latest . --template react-ts  -- --no-git || { Echo
 EchoInfo "Installing dependencies: panda-css, axios, react-router-dom..."
 $PACKAGE_MANAGER install @pandacss/dev axios react-router-dom
 
+EchoInfo "Initialise Panda CSS..."
 #Initialise Panda CSS
 $PACKAGE_MANAGER panda init --postcss
 
+EchoInfo "Configuring the entry CSS with layers..."
 # Update index.css
 echo "@layer reset, base, tokens, recipes, utilities;" > src/index.css
 
+EchoInfo "Project Setup Complete. 🚀"
 
-EchoInfo "Project Setup Complete."
+EchoInfo "Run the following commands to start:\n cd $BASE_DIR\n $PACKAGE_MANAGER run dev"
