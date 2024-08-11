@@ -79,11 +79,13 @@ mkdir -p "$BASE_DIR" || { EchoError "Failed to create directory $BASE_DIR"; exit
 cd "$BASE_DIR" || { EchoError "Failed to change directory to $BASE_DIR"; exit 1; }
 
 # Initialize the React project using Vite with TypeScript + SWC
-$PACKAGE_MANAGER create vite@latest . --template react-ts  -- --no-git || { EchoError "Failed to create React project"; exit 1; }
+$PACKAGE_MANAGER create vite@latest . --template react-swc-ts  -- --no-git || { EchoError "Failed to create React project"; exit 1; }
 
 # Install dependencies
 EchoInfo "Installing dependencies: panda-css (dev), axios, react-router-dom...."
-$PACKAGE_MANAGER install axios react-router-dom -D @pandacss/dev 
+$PACKAGE_MANAGER add axios react-router-dom
+$PACKAGE_MANAGER add -D @pandacss/dev
+$PACKAGE_MANAGER install
 
 #Initialise Panda CSS
 EchoInfo "Initialise Panda CSS..."
