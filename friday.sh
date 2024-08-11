@@ -1,13 +1,10 @@
 #!/bin/zsh
 
 #Setup the default values
-CHOICE=0
-CONFIRM="y"
 RED='\033[0;31m'
 YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
-FOLDER_NAME=""
 BASE_DIR=""
 PACKAGE_MANAGER="pnpm"
 
@@ -60,6 +57,12 @@ if [ -z "$PACKAGE_MANAGER" ]; then
     EchoInfo "Package manager is not provided. Asking for the package manager."
     read -p "Enter package manager (npm, yarn, pnpm) [pnpm]: " package_manager
     PACKAGE_MANAGER=${package_manager:-pnpm}
+fi
+
+# Check if the package manager is installed
+if ! command -v "$PACKAGE_MANAGER" &> /dev/null; then
+    EchoError "Package manager '$PACKAGE_MANAGER' is not installed on this system."
+    exit 1
 fi
 
 EchoInfo "Creating a new React project in $BASE_DIR using $PACKAGE_MANAGER package manager."
