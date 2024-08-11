@@ -62,4 +62,5 @@ If you have suggestions or improvements, feel free to open an issue or submit a 
 ## Contact Me:
 Get in touch today
 Let’s talk; if you want to collaborate or an idea you may have
-✉️ contact@bharatbhushan.me 
+
+# ✉️ contact@bharatbhushan.me 
