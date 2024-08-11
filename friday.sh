@@ -32,7 +32,6 @@ EchoWarning() {
 }
 
 
-
 # Function to print usage
 usage() {
     echo "Usage: $0 -d <directory> [-p <package-manager>]"
@@ -92,7 +91,7 @@ $PACKAGE_MANAGER panda init --postcss
 
 #Updating package.json scripts
 EchoInfo "Updating package.json scripts..."
-jq '.scripts.prepare = "codegen"' package.json > tmp.json && mv tmp.json package.json
+jq '.scripts.prepare = "panda codegen"' package.json > tmp.json && mv tmp.json package.json
 
 
 # Update index.css
@@ -113,6 +112,9 @@ if [ -f "$PANDA_CONFIG_FILE" ]; then
 else
     EchoWarning "$PANDA_CONFIG_FILE not found. Skipping configuration update."
 fi
+
+EchoInfo "Panda Config Prepare..."
+$PACKAGE_MANAGER run prepare
 
 EchoInfo "Project Setup Complete. 🚀"
 
