@@ -66,8 +66,25 @@ fi
 
 # Check if the package manager is installed
 if ! command -v "$PACKAGE_MANAGER" &> /dev/null; then
-    EchoError "Package manager '$PACKAGE_MANAGER' is not installed on this system."
-    exit 1
+    EchoError "Package manager '$PACKAGE_MANAGER' is not installed on this system. Trying to install."
+        case "$PACKAGE_MANAGER" in
+        pnpm)
+            npm install -g pnpm || { log "Failed to install pnpm"; exit 1; }
+            ;;
+        yarn)
+            npm install -g yarn || { log "Failed to install yarn"; exit 1; }
+            ;;
+        npm)
+            log "npm should already be installed. Exiting."
+            exit 1
+            ;;
+        *)
+            log "Unknown package manager: $package_manager. Exiting."
+            exit 1
+            ;;
+    esac
+    else
+    EchoInfo "Package manager '$PACKAGE_MANAGER' is installed."
 fi
 
 EchoInfo "Creating a new React project in $BASE_DIR using $PACKAGE_MANAGER package manager."
@@ -79,7 +96,11 @@ mkdir -p "$BASE_DIR" || { EchoError "Failed to create directory $BASE_DIR"; exit
 cd "$BASE_DIR" || { EchoError "Failed to change directory to $BASE_DIR"; exit 1; }
 
 # Initialize the React project using Vite with TypeScript + SWC
-$PACKAGE_MANAGER create vite@latest . --template react-swc-ts  -- --no-git || { EchoError "Failed to create React project"; exit 1; }
+if [ "$PACKAGE_MANAGER" = "yarn" ]; then
+    $PACKAGE_MANAGER create vite . --template react-swc-ts --no-git || { EchoError "Failed to create React project"; exit 1; }
+else
+    $PACKAGE_MANAGER create vite@latest . --template react-swc-ts -- --no-git || { EchoError "Failed to create React project"; exit 1; }
+fi
 
 # Install dependencies
 EchoInfo "Installing dependencies: panda-css (dev), axios, react-router-dom...."
@@ -89,7 +110,12 @@ $PACKAGE_MANAGER install
 
 #Initialise Panda CSS
 EchoInfo "Initialise Panda CSS..."
-$PACKAGE_MANAGER panda init --postcss
+if [ "$PACKAGE_MANAGER" = "npm" ]; then
+   npx panda init --postcss
+else
+    $PACKAGE_MANAGER panda init --postcss
+fi
+
 
 #Updating package.json scripts
 EchoInfo "Updating package.json scripts..."

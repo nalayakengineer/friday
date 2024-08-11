@@ -50,7 +50,7 @@ Ensure you have one of the following package managers installed on your system:
 2.	**Package Manager Verification**: Checks if the specified package manager is installed on your system.
 3.	**Project Initialization**: Uses Vite to create a new React project with TypeScript and SWC.
 4.	**Dependency Installation**: Installs Panda CSS, Axios, and React Router DOM.
-5.	**Panda CSS Configuration**: Initializes Panda CSS and updates the index.css file to import Panda’s base CSS.
+5.	**Panda CSS Configuration**: Initializes and set up Panda CSS and updates the index.css file to import Panda’s base CSS.
 6.	**Completion**: Logs a success message indicating the project setup is complete.
 
 ## Logging
