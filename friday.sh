@@ -66,3 +66,25 @@ if ! command -v "$PACKAGE_MANAGER" &> /dev/null; then
 fi
 
 EchoInfo "Creating a new React project in $BASE_DIR using $PACKAGE_MANAGER package manager."
+
+# Create the directory if it doesn't exist
+mkdir -p "$BASE_DIR" || { EchoError "Failed to create directory $BASE_DIR"; exit 1; }
+
+# Navigate to the directory
+cd "$BASE_DIR" || { EchoError "Failed to change directory to $BASE_DIR"; exit 1; }
+
+# Initialize the React project using Vite with TypeScript + SWC
+$PACKAGE_MANAGER create vite@latest . --template react-ts  -- --no-git || { EchoError "Failed to create React project"; exit 1; }
+
+# Install dependencies
+EchoInfo "Installing dependencies: panda-css, axios, react-router-dom..."
+$PACKAGE_MANAGER install @pandacss/dev axios react-router-dom
+
+#Initialise Panda CSS
+$PACKAGE_MANAGER panda init --postcss
+
+# Update index.css
+echo "@layer reset, base, tokens, recipes, utilities;" > src/index.css
+
+
+EchoInfo "Project Setup Complete."

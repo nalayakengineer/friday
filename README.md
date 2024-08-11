@@ -26,7 +26,7 @@ Ensure you have one of the following package managers installed on your system:
 ## Options
  -d <directory>: (Required) The directory where the React project will be created.
  -p <package-manager>: (Optional) The package manager to use (pnpm, npm, yarn). Defaults to pnpm.
- -h: (Optional) Print the help message and exit.
+ -h (Optional) Print the help message and exit.
 ```
 
 ## Examples
